@@ -39,6 +39,7 @@ function App() {
               setNewStudentId('');
             } catch (err) {
               console.error("Error registering student:", err);
+              alert("Error registering student");
             }
           } else {
             console.log("MetaMask is not installed.");
@@ -58,6 +59,7 @@ function App() {
               setStudentId('');
             } catch (err) {
               console.error("Error removing student:", err);
+              alert("Error removing student");
             }
           } else {
             console.log("MetaMask is not installed.");
@@ -74,6 +76,7 @@ function App() {
         setStudentNameById(name);
       } catch (err) {
         console.error("Error retrieving student name:", err);
+        alert("Error retrieving student name");
       }
   };
 }
@@ -88,6 +91,7 @@ function App() {
         setStudents(studentsList);
       } catch (err) {
         console.error("Error retrieving students:", err);
+        alert("Error retrieving students");
       }
   };
 }

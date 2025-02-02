@@ -34,17 +34,17 @@ function App() {
           const signer = await provider.getSigner();
           const contract = new ethers.Contract(contractAddress, abi, signer);
   
-          try {
+        try {
               const tx = await contract.registerStudent(newStudentName, newStudentId);
               await tx.wait();
               alert("Student Registered");
               setNewStudentName('');
               setNewStudentId('');
-            } catch (err) {
+        } catch (err) {
               console.error("Error registering student:", err);
               toast.error("Error registering student");
-            }
-          } else {
+          }
+        } else {
             console.log("MetaMask is not installed.");
             toast.error("MetaMask is not installed.");
           }
@@ -57,16 +57,16 @@ function App() {
         const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, abi, signer);
           
-          try {
+      try {
               const tx = await contract.removeStudent(studentId);
               await tx.wait();
               alert("Student Removed");
               setStudentId('');
-            } catch (err) {
+        } catch (err) {
               console.error("Error removing student:", err);
               toast.error("Error removing student");
-            }
-          } else {
+          }
+        } else {
             console.log("MetaMask is not installed.");
             toast.error("MetaMask is not installed.");
           }
@@ -109,90 +109,99 @@ function App() {
 }
 
   return (
-    <div className="bg-gray-100 min-h-screen p-8">
-    <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">School System</h1>
-  
-    <div className="mb-6 bg-white p-4 rounded-lg shadow-lg">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">Register a Student</h2>
-      <div className="flex flex-wrap gap-4">
+    <div className="min-h-screen bg-gray-50 p-8">
+  <div className="max-w-4xl mx-auto space-y-8">
+    <div className="text-center">
+      <h1 className="text-4xl font-bold text-blue-600 mb-2">School System</h1>
+      <p className="text-gray-500">Manage your students efficiently</p>
+    </div>
+
+    <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg">
+      <h2 className="text-xl font-semibold mb-6 text-gray-800">Register a Student</h2>
+      <div className="grid md:grid-cols-2 gap-4">
         <input
           type="text"
           placeholder="Student Name"
           value={newStudentName}
           onChange={(e) => setNewStudentName(e.target.value)}
-          className="border border-gray-300 rounded p-2 w-full md:w-1/2"
+          className="border border-gray-300 p-2 rounded-md"
         />
         <input
           type="number"
           placeholder="Student ID"
           value={newStudentId}
           onChange={(e) => setNewStudentId(e.target.value)}
-          className="border border-gray-300 rounded p-2 w-full md:w-1/2"
+          className="border border-gray-300 p-2 rounded-md"
         />
-        <button 
-          onClick={registerStudent}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full md:w-auto"
-        >
-          Register
-        </button>
+        <div className="md:col-span-2">
+          <button onClick={registerStudent} className="bg-blue-600 text-white p-2 rounded-md w-full hover:bg-blue-700">
+            Register Student
+          </button>
+        </div>
       </div>
     </div>
-  
-    <div className="mb-6 bg-white p-4 rounded-lg shadow-lg">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">Get Student Name</h2>
-      <div className="flex flex-wrap gap-4">
-        <input
-          type="number"
-          placeholder="Enter student ID"
-          value={studentId}
-          onChange={(e) => setStudentId(e.target.value)}
-          className="border border-gray-300 rounded p-2 w-full md:w-1/2"
-        />
-        <button 
-          onClick={getStudentNameById}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full md:w-auto"
-        >
-          Get Name
-        </button>
+
+    <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg">
+      <h2 className="text-xl font-semibold mb-6 text-gray-800">Get Student Name</h2>
+      <div className="space-y-4">
+        <div className="flex gap-4">
+          <input
+            type="number"
+            placeholder="Enter student ID"
+            value={studentId}
+            onChange={(e) => setStudentId(e.target.value)}
+            className="border border-gray-300 p-2 rounded-md flex-1"
+          />
+          <button onClick={getStudentNameById} className="bg-blue-600 text-white p-2 rounded-md whitespace-nowrap hover:bg-blue-700">
+            Get Name
+          </button>
+        </div>
+        {studentNameById && (
+          <p className="text-gray-700 bg-blue-100 p-4 rounded-lg">
+            Student Name: {studentNameById}
+          </p>
+        )}
       </div>
-      <p className="mt-4 text-gray-700">{studentNameById ? `Student Name: ${studentNameById}` : null}</p>
     </div>
-  
-    <div className="mb-6 bg-white p-4 rounded-lg shadow-lg">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">Retrieve All Students</h2>
-      <button 
-        onClick={retrieve}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-      >
+
+    <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg">
+      <h2 className="text-xl font-semibold mb-6 text-gray-800">All Students</h2>
+      <button onClick={retrieve} className="bg-blue-600 text-white p-2 rounded-md w-full mb-6 hover:bg-blue-700">
         Retrieve Students
       </button>
-      <ul className="list-disc pl-5">
-        {students.map((student, index) => (
-          <li key={index} className="text-gray-700 mb-1">{student.name} (ID: {student.id})</li>
-        ))}
-      </ul>
+      {students.length > 0 && (
+        <div className="bg-blue-100 rounded-lg p-4">
+          <ul className="divide-y divide-gray-200">
+            {students.map((student, index) => (
+              <li key={index} className="py-3 flex justify-between items-center">
+                <span className="text-gray-700">{student.name}</span>
+                <span className="text-gray-500 text-sm">ID: {student.id}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
-  
-    <div className="bg-white p-4 rounded-lg shadow-lg">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">Remove a Student</h2>
-      <div className="flex flex-wrap gap-4">
+
+    <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg">
+      <h2 className="text-xl font-semibold mb-6 text-gray-800">Remove Student</h2>
+      <div className="flex gap-4">
         <input
           type="number"
           placeholder="Enter student ID to remove"
           value={studentId}
           onChange={(e) => setStudentId(e.target.value)}
-          className="border border-gray-300 rounded p-2 w-full md:w-1/2"
+          className="border border-gray-300 p-2 rounded-md flex-1"
         />
-        <button 
-          onClick={removeStudent}
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full md:w-auto"
-        >
+        <button onClick={removeStudent} className="bg-red-600 text-white p-2 rounded-md whitespace-nowrap hover:bg-red-700">
           Remove Student
         </button>
       </div>
     </div>
-    <ToastContainer />
+    <ToastContainer position="bottom-right" theme="colored"/>
   </div>
+</div>
+
   )
 }
 
